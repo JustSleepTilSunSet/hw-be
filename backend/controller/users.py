@@ -20,7 +20,7 @@ def register():
         session.add(new_user)
         session.commit()
 
-        return jsonify({'status': HTTPStatus.OK, 'message': 'login success'})
+        return jsonify({'status': HTTPStatus.OK, 'message': 'register success'})
     except Exception as e:
         print(str(e))
         return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'register failed.'})
@@ -94,4 +94,20 @@ def deleteUserById():
         return jsonify({'status': HTTPStatus.OK, 'message': 'deleteUserById success'})
     except Exception as e:
         print(str(e))
-        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'updateUserById failed.'})
+        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'deleteUserById failed.'})
+
+@userRouter.route('/login', methods=['POST'])
+def login(): 
+    try:
+        resp = request.json
+        print(json.dumps(resp))
+        session = createSession()
+        data = (session.query(User).filter_by(id=resp["id"]).first());
+        if(resp["account"] != data.to_login_format()["account"] or resp["pwd"] != data.to_login_format()["pwd"] ):
+            return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})
+
+        session.commit();
+        return jsonify({'status': HTTPStatus.OK, 'message': 'login success'})
+    except Exception as e:
+        print(str(e))
+        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})

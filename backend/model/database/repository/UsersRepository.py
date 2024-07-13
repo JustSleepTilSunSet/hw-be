@@ -20,3 +20,12 @@ class User(Base):
             'name': self.hwname,
             'email': self.hwmail
         }
+    
+    def to_login_format(self):
+        return {
+            'id': self.id,
+            'name': self.hwname,
+            'email': self.hwmail,
+            'account': self.hwaccount,
+            'pwd': self.hwpwd
+        }
