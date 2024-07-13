@@ -1,6 +1,7 @@
 <template>
   <nav>
     <router-link to="/">登入</router-link>
+    
   </nav>
   <router-view/>
 </template>

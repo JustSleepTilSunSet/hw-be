@@ -4,6 +4,8 @@ import json
 userRouter = Blueprint('users', __name__)
 from model.database.initdb import createSession;
 from model.database.repository.UsersRepository import User
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,decode_token
+from datetime import timedelta
 
 @userRouter.route("/")
 def hello_world():
@@ -102,12 +104,13 @@ def login():
         resp = request.json
         print(json.dumps(resp))
         session = createSession()
-        data = (session.query(User).filter_by(id=resp["id"]).first());
+        data = (session.query(User).filter_by(hwaccount=resp["account"]).first());
         if(resp["account"] != data.to_login_format()["account"] or resp["pwd"] != data.to_login_format()["pwd"] ):
             return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})
-
+        expires = timedelta(minutes=10)
+        access_token = create_access_token(identity=json.dumps(data.to_login_format()), expires_delta=expires)
         session.commit();
-        return jsonify({'status': HTTPStatus.OK, 'message': 'login success'})
+        return jsonify({'status': HTTPStatus.OK, 'message': 'login success',"access_token":access_token})
     except Exception as e:
         print(str(e))
         return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})

@@ -4,7 +4,7 @@
       <div class="row">
         <ul class="nav">
           <li class="nav-item">
-            <button class="nav-link active" @click="hi">註冊</button>
+            <register></register>
           </li>
         </ul>
       </div>
@@ -23,9 +23,9 @@
         <div class="col">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1">密碼</span>
+              <span  class="input-group-text" id="basic-addon1">密碼</span>
             </div>
-            <input v-model="password" type="text" class="form-control" placeholder="Password"
+            <input type="password"  v-model="password" class="form-control" placeholder="Password"
               aria-describedby="basic-addon1">
           </div>
         </div>
@@ -44,26 +44,36 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
+import { healthCheck,login } from '../../apis/hwbackend';
+import register from './register.vue'
 let account = ref("");
 let password = ref("");
 export default defineComponent({
   setup() {
-    const hi = () => {
-      console.log("hi");
+    const hi = async () => {
+      await healthCheck();
     }
-    const toLogin = () => {
+    const toLogin = async () => {
       console.log(account.value);
       console.log(password.value);
+      await login(account.value,password.value);
     }
+
     return {
       hi,
-      toLogin, account,password
+      toLogin,
+      account,
+      password
     }
   },
   name: 'HelloWorld',
   props: {
     msg: String,
+    modal: null
   },
+  components: {
+    register
+  }
 });
 </script>
 
