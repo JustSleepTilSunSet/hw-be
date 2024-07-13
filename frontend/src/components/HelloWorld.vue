@@ -14,7 +14,7 @@
             <div class="input-group-prepend">
               <span class="input-group-text" id="basic-addon1">帳號</span>
             </div>
-            <input v-model="account" type="text" class="form-control" placeholder="Username"
+            <input v-model="account" type="text" class="form-control" placeholder="Email"
               aria-describedby="basic-addon1">
           </div>
         </div>

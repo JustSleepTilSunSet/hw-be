@@ -29,14 +29,6 @@
               <div class="mb-3">
                 <div class="input-group mb-3">
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">登入用帳號</span>
-                  </div>
-                  <input type="text" class="form-control" placeholder="account" aria-describedby="basic-addon1">
-                </div>
-              </div>
-              <div class="mb-3">
-                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">登入用密碼</span>
                   </div>
                   <input  type="password"  class="form-control" placeholder="password" aria-describedby="basic-addon1">
