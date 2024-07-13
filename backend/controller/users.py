@@ -18,7 +18,7 @@ def register():
         print(json.dumps(resp))
         # connectInitDatabase();
         session = createSession()
-        new_user =User(hwaccount = resp["hwaccount"], hwpwd = resp["hwpwd"], hwname = resp["hwname"], hwmail = resp["hwmail"]);
+        new_user =User(hwpwd = resp["hwpwd"], hwname = resp["hwname"], hwmail = resp["hwmail"]);
         session.add(new_user)
         session.commit()
 
@@ -104,8 +104,8 @@ def login():
         resp = request.json
         print(json.dumps(resp))
         session = createSession()
-        data = (session.query(User).filter_by(hwaccount=resp["account"]).first());
-        if(resp["account"] != data.to_login_format()["account"] or resp["pwd"] != data.to_login_format()["pwd"] ):
+        data = (session.query(User).filter_by(hwmail=resp["email"]).first());
+        if(resp["pwd"] != data.to_login_format()["pwd"] ):
             return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})
         expires = timedelta(minutes=10)
         access_token = create_access_token(identity=json.dumps(data.to_login_format()), expires_delta=expires)
