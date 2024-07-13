@@ -81,3 +81,17 @@ def updateUserById():
     except Exception as e:
         print(str(e))
         return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'updateUserById failed.'})
+
+@userRouter.route('/deleteUserById', methods=['DELETE'])
+def deleteUserById(): 
+    try:
+        resp = request.json
+        print(json.dumps(resp))
+        session = createSession()
+        updated_rows = session.query(User).filter_by(id=resp["id"]).delete();
+        print(updated_rows);
+        session.commit();
+        return jsonify({'status': HTTPStatus.OK, 'message': 'deleteUserById success'})
+    except Exception as e:
+        print(str(e))
+        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'updateUserById failed.'})
