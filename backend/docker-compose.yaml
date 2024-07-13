@@ -1,0 +1,35 @@
+version: '3.6'
+
+services:
+  postgres_hw:
+    container_name: postgres_hw
+    image: postgres:alpine3.20
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+      POSTGRES_DB: postgres
+    ports:
+      - 5433:5432
+    volumes:
+       - DB:/data/postgres
+    networks:
+      - hw-net
+
+  hw-backend:
+    container_name: hw-backend
+    restart: always
+    build: .
+    ports:
+      - 10001:10001
+    volumes:
+       - $PWD:/app/backend
+    networks:
+      - hw-net
+
+networks:
+  hw-net:
+
+volumes:
+  DB:
