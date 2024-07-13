@@ -13,7 +13,7 @@ def hello_world():
 def register(): 
     resp = request.json
     try:
-        print(jsonify(resp))
+        print(json.dumps(resp))
         # connectInitDatabase();
         session = createSession()
         new_user =User(hwaccount = resp["hwaccount"], hwpwd = resp["hwpwd"], hwname = resp["hwname"], hwmail = resp["hwmail"]);
@@ -23,7 +23,7 @@ def register():
         return jsonify({'status': HTTPStatus.OK, 'message': 'login success'})
     except Exception as e:
         print(str(e))
-        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})
+        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'register failed.'})
 
 @userRouter.route('/getUserById', methods=['GET'])
 def getUserById(): 
@@ -38,10 +38,10 @@ def getUserById():
 
         json_string = json.dumps(user.to_dict())
         print(json_string)
-        return jsonify({'status': HTTPStatus.OK, 'message': 'login success', 'info': user.to_dict()})
+        return jsonify({'status': HTTPStatus.OK, 'message': 'getUserById success', 'info': user.to_dict()})
     except Exception as e:
         print(str(e))
-        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})
+        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'getUserById failed.'})
 
 @userRouter.route('/getUsers', methods=['GET'])
 def getUser(): 
@@ -54,7 +54,30 @@ def getUser():
         users_list = [user.to_dict() for user in users]
         json_string = json.dumps(users_list)
         print(json_string)
-        return jsonify({'status': HTTPStatus.OK, 'message': 'login success', 'info': users_list})
+        return jsonify({'status': HTTPStatus.OK, 'message': 'getUsers success', 'info': users_list})
     except Exception as e:
         print(str(e))
-        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})
+        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'getUsers failed.'})
+
+@userRouter.route('/updateUserById', methods=['PUT'])
+def updateUserById(): 
+    try:
+        resp = request.json
+        print(json.dumps(resp))
+        update_fields = {}
+        if 'name' in resp:
+            update_fields['hwname'] = resp['name']
+        if 'email' in resp:
+            update_fields['hwemail'] = resp['email']
+        if 'password' in resp:
+            update_fields['hwpwd'] = resp['password']
+
+        session = createSession()
+        print(json.dumps(update_fields))
+        updated_rows = session.query(User).filter_by(id=resp["id"]).update(update_fields);
+        print(updated_rows);
+        session.commit();
+        return jsonify({'status': HTTPStatus.OK, 'message': 'updateUserById success'})
+    except Exception as e:
+        print(str(e))
+        return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'updateUserById failed.'})
