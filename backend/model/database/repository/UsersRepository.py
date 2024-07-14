@@ -19,11 +19,15 @@ class User(Base):
             'name': self.hwname,
             'email': self.hwmail
         }
-    
+
+    def to_token_format(self):
+        return {
+            'id': self.id
+        }
+
     def to_login_format(self):
         return {
             'id': self.id,
-            'name': self.hwname,
             'email': self.hwmail,
             'pwd': self.hwpwd
         }

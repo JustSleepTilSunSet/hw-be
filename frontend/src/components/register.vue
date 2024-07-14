@@ -15,7 +15,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">姓名</span>
                   </div>
-                  <input type="text" class="form-control" placeholder="姓名" aria-describedby="basic-addon1">
+                  <input type="text" v-model="name" class="form-control" placeholder="姓名" aria-describedby="basic-addon1">
                 </div>
               </div>
               <div class="mb-3">
@@ -23,7 +23,7 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">信箱</span>
                   </div>
-                  <input type="text" class="form-control" placeholder="email" aria-describedby="basic-addon1">
+                  <input type="text" v-model="email" class="form-control" placeholder="email" aria-describedby="basic-addon1">
                 </div>
               </div>
               <div class="mb-3">
@@ -31,14 +31,14 @@
                   <div class="input-group-prepend">
                     <span class="input-group-text" id="basic-addon1">登入用密碼</span>
                   </div>
-                  <input  type="password"  class="form-control" placeholder="password" aria-describedby="basic-addon1">
+                  <input type="password" v-model="pwd" class="form-control" placeholder="password" aria-describedby="basic-addon1">
                 </div>
               </div>
             </form>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-outline-danger">返回</button>
-            <button type="button" class="btn btn-outline-success" @click="toLogin">註冊</button>
+            <button type="button" class="btn btn-outline-success" @click="toRegister">註冊</button>
           </div>
         </div>
       </div>
@@ -57,9 +57,14 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { Modal } from 'bootstrap';
+import { register } from '../../apis/hwbackend';
+import { HttpStatusCode } from 'axios';
 
 const registerModal = ref<HTMLElement | null>();
 let modalInstance: Modal | null = null;
+const name = ref();
+const pwd = ref();
+const email = ref();
 
 const showModal = () => {
   if (registerModal.value) {
@@ -75,6 +80,17 @@ const hideModal = () => {
     modalInstance.hide();
   }
 };
+const toRegister = async () => {
+  let response = await register(name.value,pwd.value,email.value);
+  if(response.status!=HttpStatusCode.Ok){
+    alert("註冊失敗");
+    return;
+  }else{
+    alert("註冊成功!");
+    modalInstance?.hide();
+    return;
+  }
+}
 </script>
 
 <style></style>

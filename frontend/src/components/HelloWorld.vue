@@ -23,9 +23,9 @@
         <div class="col">
           <div class="input-group mb-3">
             <div class="input-group-prepend">
-              <span  class="input-group-text" id="basic-addon1">密碼</span>
+              <span class="input-group-text" id="basic-addon1">密碼</span>
             </div>
-            <input type="password"  v-model="password" class="form-control" placeholder="Password"
+            <input type="password" v-model="password" class="form-control" placeholder="Password"
               aria-describedby="basic-addon1">
           </div>
         </div>
@@ -44,8 +44,10 @@
 
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
-import { healthCheck,login } from '../../apis/hwbackend';
+import { healthCheck, login } from '../../apis/hwbackend';
 import register from './register.vue'
+import { JWTdecode } from '../../apis/helpers'
+import { HttpStatusCode } from 'axios';
 let account = ref("");
 let password = ref("");
 export default defineComponent({
@@ -56,7 +58,19 @@ export default defineComponent({
     const toLogin = async () => {
       console.log(account.value);
       console.log(password.value);
-      await login(account.value,password.value);
+      let res = await login(account.value, password.value);
+      if (res.status == HttpStatusCode.InternalServerError) {
+        alert("登入失敗");
+        return;
+      }
+      if(res.access_token!=null){
+        localStorage.setItem("access_token", res.access_token);
+      }else{
+        alert("登入失敗");
+        return;
+      }
+      // console.log(localStorage.getItem("access_token"));
+      // console.log(JWTdecode(res.access_token));
     }
 
     return {
