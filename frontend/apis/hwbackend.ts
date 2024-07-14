@@ -69,3 +69,23 @@ export const updateUserById = async (data: any, token: any) => {
         return null;
     }
 }
+
+export const getUsers = async (token: any) => {
+    try {
+        const response = await axios({
+            method: 'GET',
+            url: `${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/getUsers`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+          });
+          console.log(response.data);
+        // let response = await axios.get(`${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/getUsers`);
+
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}

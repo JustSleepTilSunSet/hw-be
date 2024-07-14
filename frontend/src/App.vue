@@ -2,7 +2,7 @@
   <nav>
     <router-link to="/">登入</router-link> |
     <router-link to="/update">更新用戶資訊</router-link>|
-    <router-link to="/">取得用戶列表</router-link>|
+    <router-link to="/listUser">取得用戶列表</router-link>|
     <router-link to="/">單一用戶查詢</router-link>|
     
   </nav>

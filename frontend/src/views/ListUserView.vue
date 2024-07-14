@@ -1,17 +1,17 @@
 <template>
   <div >
-    <updateUser/>
+    <ListUser/>
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import updateUser from '@/components/updateUser.vue'; // @ is an alias to /src
+import ListUser from '@/components/listUser.vue'; // @ is an alias to /src
 
 export default defineComponent({
-  name: 'UpdateView',
+  name: 'ListUserView',
   components: {
-    updateUser
+    ListUser
   },
 });
 </script>

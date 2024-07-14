@@ -77,7 +77,7 @@ def getUsers():
 
         # List user.
         users = session.query(User).all();
-        users_list = [user.to_dict() for user in users]
+        users_list = [user.to_list_dict() for user in users]
         json_string = json.dumps(users_list)
         print(json_string)
         return jsonify({'status': HTTPStatus.OK, 'message': 'getUsers success', 'info': users_list})

@@ -21,6 +21,13 @@ class User(Base):
             'email': self.hwmail
         }
 
+    def to_list_dict(self):
+        return {
+            'name': self.hwname,
+            'email': self.hwmail,
+            'isadmin': self.isadmin
+        }
+
     def to_token_format(self):
         return {
             'id': self.id
