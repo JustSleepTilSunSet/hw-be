@@ -14,9 +14,9 @@
       <div class="col">
         <div class="input-group mb-3">
           <div class="input-group-prepend">
-            <span class="input-group-text" id="basic-addon1">電子信箱</span>
+            <span class="input-group-text" id="basic-addon1">密碼</span>
           </div>
-          <input type="text" v-model="email" class="form-control" placeholder="email"
+          <input type="text" v-model="password" class="form-control" placeholder="password"
             aria-describedby="basic-addon1">
         </div>
       </div>
@@ -45,11 +45,11 @@ import { ref } from 'vue';
 import { updateUserById } from '../../apis/hwbackend';
 import { HttpStatusCode } from 'axios';
 let uId = ref("");
-let email = ref("");
+let password = ref("");
 let uname = ref("");
 interface Data {
   id: string;
-  email?: string;
+  password?: string;
   name?: string;
 }
 const submitUpdate = async ()=>{
@@ -60,8 +60,8 @@ const submitUpdate = async ()=>{
   let data: Data = {
     id: uId.value
   }
-  if(email.value.length>0){
-    data.email = email.value;
+  if(password.value.length>0){
+    data.password = password.value;
   }
   if(uname.value.length>0){
     data.name = uname.value;

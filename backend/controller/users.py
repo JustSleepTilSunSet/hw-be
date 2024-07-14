@@ -104,8 +104,6 @@ def updateUserById():
         update_fields = {}
         if 'name' in resp:
             update_fields['hwname'] = resp['name']
-        if 'email' in resp:
-            update_fields['hwmail'] = resp['email']
         if 'password' in resp:
             update_fields['hwpwd'] = resp['password']
 
