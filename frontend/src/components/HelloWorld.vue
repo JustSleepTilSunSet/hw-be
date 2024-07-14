@@ -70,6 +70,10 @@ export default defineComponent({
         alert("登入失敗");
         return;
       }
+      if(res.status == HttpStatusCode.Ok){
+        alert("登入成功");
+        return;
+      }
       // console.log(localStorage.getItem("access_token"));
       // console.log(JWTdecode(res.access_token));
     }
