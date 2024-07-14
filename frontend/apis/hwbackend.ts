@@ -100,3 +100,22 @@ export const getUsers = async (token: any) => {
         return null;
     }
 }
+
+export const deleteUserById = async (data: any, token: string | null) => {
+    try {
+        const response = await axios({
+            method: 'DELETE',
+            url: `${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/deleteUserById`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            data
+        });
+
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}

@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import UpdateView from '../views/UpdateUserView.vue'
 import ListUserView from '../views/ListUserView.vue'
 import QueryUserView from '../views/QueryUserView.vue'
+import DeleteUserView from '../views/DeleteUserView.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -23,6 +24,21 @@ const routes: Array<RouteRecordRaw> = [
     path: '/queryUser',
     name: 'queryUser',
     component: QueryUserView
+  },
+  {
+    path: '/queryUser',
+    name: 'queryUser',
+    component: QueryUserView
+  },
+  {
+    path: '/queryUser',
+    name: 'queryUser',
+    component: QueryUserView
+  },
+  {
+    path: '/deleteUser',
+    name: 'deleteUser',
+    component: DeleteUserView
   }
 ]
 
