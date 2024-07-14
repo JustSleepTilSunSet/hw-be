@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from model.database.repository.UserField import id, hwpwd, hwname, hwmail
+from model.database.repository.UserField import id, hwpwd, hwname, hwmail,isadmin
 import os
 POSTGRES_URI = os.getenv("POSTGRES_URI")
 TABLE_NAME_USER = os.getenv("TABLE_NAME_USER")
@@ -12,6 +12,7 @@ class User(Base):
     hwpwd = hwpwd;
     hwname = hwname;
     hwmail = hwmail;
+    isadmin = isadmin;
 
     def to_dict(self):
         return {
@@ -30,4 +31,10 @@ class User(Base):
             'id': self.id,
             'email': self.hwmail,
             'pwd': self.hwpwd
+        }
+    
+    def to_AdmCheck_format(self):
+        return {
+            'id': self.id,
+            'isadmin': self.isadmin
         }

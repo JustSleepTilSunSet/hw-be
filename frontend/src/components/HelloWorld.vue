@@ -46,6 +46,7 @@
 import { defineComponent, ref } from 'vue';
 import { healthCheck, login } from '../../apis/hwbackend';
 import register from './register.vue'
+import updateUser from './updateUser.vue'
 import { JWTdecode } from '../../apis/helpers'
 import { HttpStatusCode } from 'axios';
 let account = ref("");
@@ -63,9 +64,9 @@ export default defineComponent({
         alert("登入失敗");
         return;
       }
-      if(res.access_token!=null){
+      if (res.access_token != null) {
         localStorage.setItem("access_token", res.access_token);
-      }else{
+      } else {
         alert("登入失敗");
         return;
       }
@@ -86,28 +87,9 @@ export default defineComponent({
     modal: null
   },
   components: {
-    register
+    register, updateUser
   }
 });
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
-}
-</style>
+<style scoped></style>

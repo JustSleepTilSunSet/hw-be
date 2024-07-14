@@ -17,7 +17,6 @@ export const register = async (name: string, pwd: string, mail: string) => {
             "hwname": name,
             "hwmail": mail
         };
-        console.log(JSON.stringify(data,null,2));
         let response = await axios.post(`${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/register`, data);
 
         return response.data;
@@ -35,6 +34,35 @@ export const login = async (account: string, pwd: string) => {
         };
         let response = await axios.post(`${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/login`, data);
 
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+
+export const getUser = async (id: number) => {
+    try {
+        const data = {
+            "id": id
+        };
+        let response = await axios.post(`${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/login`, data);
+
+        return response.data;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
+export const updateUserById = async (data: any, token: any) => {
+    try {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+        };
+        let response = await axios.put(`${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/updateUserById`, data, config);
         return response.data;
     } catch (err) {
         console.error(err);

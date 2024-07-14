@@ -18,7 +18,7 @@ def register():
         print(json.dumps(resp))
         # connectInitDatabase();
         session = createSession()
-        new_user =User(hwpwd = resp["hwpwd"], hwname = resp["hwname"], hwmail = resp["hwmail"]);
+        new_user = User(hwpwd = resp["hwpwd"], hwname = resp["hwname"], hwmail = resp["hwmail"], isadmin = False);
         session.add(new_user)
         session.commit()
 
@@ -30,15 +30,23 @@ def register():
 @userRouter.route('/getUserById', methods=['GET'])
 def getUserById(): 
     try:
-        # args = request.args;
+        # Check user authorized.
+        access_token = request.headers.get('Authorization').split(" ")[1]  # Get token from Authorization header
+        decoded_token = decode_token(access_token)
+        sub_dict = json.loads(decoded_token["sub"])
+        session = createSession()
+        user = session.query(User).filter_by(id=sub_dict["id"]).first();
+        isAdmin = user.to_AdmCheck_format()["isadmin"];
+        if(isAdmin == False):
+            return jsonify({'status': HTTPStatus.FORBIDDEN, 'message': 'The user is forbidden.'})
+
         id = request.args.get('id')
-        print(id)
         session = createSession()
         user = session.query(User).filter_by(id = id).first();
         if(user == None):
             return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'Unknown user.'})
 
-        json_string = json.dumps(user.to_dict())
+        json_string = json.dumps(user.to_AdmCheck_format())
         print(json_string)
         return jsonify({'status': HTTPStatus.OK, 'message': 'getUserById success', 'info': user.to_dict()})
     except Exception as e:
@@ -46,12 +54,28 @@ def getUserById():
         return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'getUserById failed.'})
 
 @userRouter.route('/getUsers', methods=['GET'])
-def getUser(): 
+def getUsers(): 
     try:
-        # args = request.args;
-        id = request.args.get('id')
-        print(id)
+        # Check user authorized.
+        access_token = request.headers.get('Authorization').split(" ")[1]  # Get token from Authorization header
+        decoded_token = decode_token(access_token)
+        sub_dict = json.loads(decoded_token["sub"])
         session = createSession()
+        user = session.query(User).filter_by(id=sub_dict["id"]).first();
+        isAdmin = user.to_AdmCheck_format()["isadmin"];
+        if(isAdmin == False):
+            return jsonify({'status': HTTPStatus.FORBIDDEN, 'message': 'The user is forbidden.'})
+
+        access_token = request.headers.get('Authorization').split(" ")[1]  # Get token from Authorization header
+        decoded_token = decode_token(access_token)
+        sub_dict = json.loads(decoded_token["sub"])
+        session = createSession()
+        user = session.query(User).filter_by(id=sub_dict["id"]).first();
+        isAdmin = user.to_AdmCheck_format()["isadmin"];
+        if(isAdmin == False):
+            return jsonify({'status': HTTPStatus.FORBIDDEN, 'message': 'The user is forbidden.'})
+
+        # List user.
         users = session.query(User).all();
         users_list = [user.to_dict() for user in users]
         json_string = json.dumps(users_list)
@@ -62,15 +86,26 @@ def getUser():
         return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'getUsers failed.'})
 
 @userRouter.route('/updateUserById', methods=['PUT'])
-def updateUserById(): 
+def updateUserById():
     try:
+        # Check user authorized.
+        access_token = request.headers.get('Authorization').split(" ")[1]  # Get token from Authorization header
+        decoded_token = decode_token(access_token)
+        sub_dict = json.loads(decoded_token["sub"])
+        session = createSession()
+        user = session.query(User).filter_by(id=sub_dict["id"]).first();
+        isAdmin = user.to_AdmCheck_format()["isadmin"];
+        print(isAdmin);
+        if(isAdmin == False):
+            return jsonify({'status': HTTPStatus.FORBIDDEN, 'message': 'The user is forbidden.'})
+
         resp = request.json
         print(json.dumps(resp))
         update_fields = {}
         if 'name' in resp:
             update_fields['hwname'] = resp['name']
         if 'email' in resp:
-            update_fields['hwemail'] = resp['email']
+            update_fields['hwmail'] = resp['email']
         if 'password' in resp:
             update_fields['hwpwd'] = resp['password']
 

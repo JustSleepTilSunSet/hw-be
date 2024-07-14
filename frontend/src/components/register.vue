@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <span>
     <!-- Modal -->
     <div class="modal fade" ref="registerModal" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog">
@@ -43,15 +43,11 @@
         </div>
       </div>
     </div>
-    <div class="container">
-      <div class="row">
         <div class="col-12 text-white p-3 text-center">
           <button type="button" class="nav-link active" @click="showModal" data-bs-target="#registerModal"
             data-bs-whatever="@fat">註冊</button>
         </div>
-      </div>
-    </div>
-  </div>
+  </span>
 </template>
 
 <script lang="ts" setup>
