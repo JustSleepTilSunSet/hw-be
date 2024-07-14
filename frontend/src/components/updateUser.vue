@@ -72,6 +72,10 @@ const submitUpdate = async ()=>{
     alert("您沒有操作權限");
     return;
   }
+  if(response.status == HttpStatusCode.InternalServerError){
+    alert("您的操作未處理，請重新登入或聯絡相關人員。");
+    return;
+  }
 }
 </script>
 

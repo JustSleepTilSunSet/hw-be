@@ -18,7 +18,8 @@ class User(Base):
         return {
             'id': self.id,
             'name': self.hwname,
-            'email': self.hwmail
+            'email': self.hwmail,
+            'isadmin': self.isadmin
         }
 
     def to_list_dict(self):

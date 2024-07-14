@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import UpdateView from '../views/UpdateUserView.vue'
 import ListUserView from '../views/ListUserView.vue'
+import QueryUserView from '../views/QueryUserView.vue'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/',
@@ -17,6 +18,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/listUser',
     name: 'listUser',
     component: ListUserView
+  },
+  {
+    path: '/queryUser',
+    name: 'queryUser',
+    component: QueryUserView
   }
 ]
 

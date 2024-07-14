@@ -41,12 +41,23 @@ export const login = async (account: string, pwd: string) => {
     }
 }
 
-export const getUser = async (id: number) => {
+export const getUserById = async (id: number, token: string | null) => {
     try {
-        const data = {
-            "id": id
-        };
-        let response = await axios.post(`${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/login`, data);
+        const response = await axios({
+            method: 'GET',
+            url: `${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/getUserById`,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            params: {
+                "id": id
+            }
+        });
+        // const data = {
+        //     "id": id
+        // };
+        // let response = await axios.post(`${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/login`, data);
 
         return response.data;
     } catch (err) {
@@ -79,8 +90,8 @@ export const getUsers = async (token: any) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
-          });
-          console.log(response.data);
+        });
+        console.log(response.data);
         // let response = await axios.get(`${process.env.VUE_APP_BACKEND_HOST}${process.env.VUE_APP_USERS_PATH}/getUsers`);
 
         return response.data;
