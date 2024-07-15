@@ -7,7 +7,7 @@ from model.database.initdb import createSession;
 from model.database.repository.UsersRepository import User
 from flask_jwt_extended import create_access_token,decode_token
 from datetime import timedelta
-
+from helpers.TypeCheck import isInt
 @userRouter.route("/")
 def hello_world():
     return "hola user"
@@ -16,8 +16,20 @@ def hello_world():
 def register(): 
     resp = request.json
     try:
+        # Check request.
+        if(resp.get("hwpwd") is None or resp.get("hwname") is None or resp.get("hwmail") is None ):
+            print("Property value incorrect.");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+
+        if(type(resp["hwpwd"]) != str or type(resp["hwname"]) != str or type(resp["hwmail"]) != str):
+            print("Property type incorrect.");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+
+        if(len(resp["hwpwd"]) == 0 or len(resp["hwname"]) == 0 or len(resp["hwmail"]) == 0 ):
+            print("Property value incorrect.");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+
         print(json.dumps(resp))
-        # connectInitDatabase();
         session = createSession()
         new_user = User(hwpwd = resp["hwpwd"], hwname = resp["hwname"], hwmail = resp["hwmail"], isadmin = False);
         session.add(new_user)
@@ -41,6 +53,13 @@ def getUserById():
         if(isAdmin == False):
             return jsonify({'status': HTTPStatus.FORBIDDEN, 'message': 'The user is forbidden.'})
 
+        # Check the request.
+        if(request.args.get('id') is None):
+            print("Request format invalid.");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+        if(isInt(request.args.get('id')) == False):
+            print("Request format invalid.");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
         id = request.args.get('id')
         session = createSession()
         user = session.query(User).filter_by(id = id).first();
@@ -96,11 +115,18 @@ def updateUserById():
         session = createSession()
         user = session.query(User).filter_by(id=sub_dict["id"]).first();
         isAdmin = user.to_AdmCheck_format()["isadmin"];
-        print(isAdmin);
+        # print(isAdmin);
         if(isAdmin == False):
             return jsonify({'status': HTTPStatus.FORBIDDEN, 'message': 'The user is forbidden.'})
 
         resp = request.json
+        if(resp.get('id') is None):
+            print("id is null");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+        if(isInt(resp.get('id')) == False):
+            print("Request format invalid.");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+
         print(json.dumps(resp))
         update_fields = {}
         if 'name' in resp:
@@ -134,6 +160,20 @@ def deleteUserById():
 
         # To delete user.
         resp = request.json
+
+        #Request check.
+        if(resp.get('id') is None):
+            print("id is null");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+
+        if(type(resp.get('id')) != int):
+            print("Request format invalid.");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+
+        if(isInt(resp.get('id')) == False):
+            print("Request format invalid.");
+            return jsonify({'status':HTTPStatus.BAD_REQUEST,'message':"Invalid request"})
+
         print(json.dumps(resp))
         session = createSession()
         updated_rows = session.query(User).filter_by(id=resp["id"]).delete();
