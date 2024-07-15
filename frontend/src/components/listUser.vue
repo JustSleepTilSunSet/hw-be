@@ -41,6 +41,10 @@ onMounted(async()=>{
   let access_token = localStorage.getItem("access_token");
   let response = await getUsers(access_token);
   console.log(JSON.stringify(response));
+  if(response.status==HttpStatusCode.Forbidden){
+    alert("您沒有權限取得使用者列表。");
+    return;
+  }
   if(response.status==HttpStatusCode.InternalServerError){
     alert("您無法取得使用者列表，嘗試重新登入或聯絡相關人員");
     return;

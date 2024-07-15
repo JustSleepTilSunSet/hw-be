@@ -153,7 +153,7 @@ def login():
         data = (session.query(User).filter_by(hwmail=resp["email"]).first());
         if(resp["pwd"] != data.to_login_format()["pwd"] ):
             return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})
-        expires = timedelta(minutes=os.getenv("JWT_ACCESS_TOKEN_EXPIRES_MINUTES"))
+        expires = timedelta(minutes=int(os.getenv("JWT_ACCESS_TOKEN_EXPIRES_MINUTES")))
         access_token = create_access_token(identity=json.dumps(data.to_token_format()), expires_delta=expires)
         session.commit();
         return jsonify({'status': HTTPStatus.OK, 'message': 'login success',"access_token":access_token})

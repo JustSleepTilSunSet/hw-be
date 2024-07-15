@@ -57,8 +57,6 @@ export default defineComponent({
       await healthCheck();
     }
     const toLogin = async () => {
-      console.log(account.value);
-      console.log(password.value);
       let res = await login(account.value, password.value);
       if (res.status == HttpStatusCode.InternalServerError) {
         alert("登入失敗");

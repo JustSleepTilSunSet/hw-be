@@ -58,9 +58,9 @@ import { HttpStatusCode } from 'axios';
 
 const registerModal = ref<HTMLElement | null>();
 let modalInstance: Modal | null = null;
-const name = ref();
-const pwd = ref();
-const email = ref();
+const name = ref("");
+const pwd = ref("");
+const email = ref("");
 
 const showModal = () => {
   if (registerModal.value) {
@@ -77,6 +77,10 @@ const hideModal = () => {
   }
 };
 const toRegister = async () => {
+  if(name.value.length == 0 || pwd.value.length == 0 || email.value.length ==0){
+    alert("註冊資訊未完整填寫");
+    return;
+  }
   let response = await register(name.value,pwd.value,email.value);
   if(response.status!=HttpStatusCode.Ok){
     alert("註冊失敗");

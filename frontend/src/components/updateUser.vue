@@ -66,8 +66,11 @@ const submitUpdate = async ()=>{
   if(uname.value.length>0){
     data.name = uname.value;
   }
-  console.log(JSON.stringify(data,null,2));
   let response = await updateUserById(data,localStorage.getItem("access_token"));
+  if(response.status == HttpStatusCode.Ok){
+    alert("已成功更新");
+    return;
+  }
   if(response.status == HttpStatusCode.Forbidden){
     alert("您沒有操作權限");
     return;
