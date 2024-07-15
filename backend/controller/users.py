@@ -1,10 +1,11 @@
 from flask import Blueprint, jsonify,request
 from http import HTTPStatus
 import json
+import os
 userRouter = Blueprint('users', __name__)
 from model.database.initdb import createSession;
 from model.database.repository.UsersRepository import User
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity,decode_token
+from flask_jwt_extended import create_access_token,decode_token
 from datetime import timedelta
 
 @userRouter.route("/")
@@ -131,6 +132,7 @@ def deleteUserById():
         if(isAdmin == False):
             return jsonify({'status': HTTPStatus.FORBIDDEN, 'message': 'The user is forbidden.'})
 
+        # To delete user.
         resp = request.json
         print(json.dumps(resp))
         session = createSession()
@@ -151,7 +153,7 @@ def login():
         data = (session.query(User).filter_by(hwmail=resp["email"]).first());
         if(resp["pwd"] != data.to_login_format()["pwd"] ):
             return jsonify({'status': HTTPStatus.INTERNAL_SERVER_ERROR, 'message': 'login failed.'})
-        expires = timedelta(minutes=10)
+        expires = timedelta(minutes=os.getenv("JWT_ACCESS_TOKEN_EXPIRES_MINUTES"))
         access_token = create_access_token(identity=json.dumps(data.to_token_format()), expires_delta=expires)
         session.commit();
         return jsonify({'status': HTTPStatus.OK, 'message': 'login success',"access_token":access_token})
