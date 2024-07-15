@@ -120,6 +120,17 @@ def updateUserById():
 @userRouter.route('/deleteUserById', methods=['DELETE'])
 def deleteUserById(): 
     try:
+        # Check user authorized.
+        access_token = request.headers.get('Authorization').split(" ")[1]  # Get token from Authorization header
+        decoded_token = decode_token(access_token)
+        sub_dict = json.loads(decoded_token["sub"])
+        session = createSession()
+        user = session.query(User).filter_by(id=sub_dict["id"]).first();
+        isAdmin = user.to_AdmCheck_format()["isadmin"];
+        print(isAdmin);
+        if(isAdmin == False):
+            return jsonify({'status': HTTPStatus.FORBIDDEN, 'message': 'The user is forbidden.'})
+
         resp = request.json
         print(json.dumps(resp))
         session = createSession()
